@@ -1,0 +1,17 @@
+FROM node:26.9.0-trixie
+
+WORKDIR /nextjs-app
+
+COPY package.json package-lock.json* ./
+RUN npm install --force
+
+# Kopiujemy cały kod źródłowy - zachowujemy pełną strukturę dla drizzle-kit
+COPY . .
+
+ENV PORT=3030
+ENV HOSTNAME="0.0.0.0"
+
+EXPOSE 3030
+
+# Uruchamiamy w trybie deweloperskim
+CMD ["npm", "run", "dev"]

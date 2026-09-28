@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+pydantic
+httpx
+google-genai
+load_dotenv
+#faster_whisper
+psycopg2-binary
+python-multipart
+typing
+asyncpg
+pypdf

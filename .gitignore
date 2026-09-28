@@ -1,0 +1,84 @@
+# ==========================================
+# GŁÓWNY PLIK .GITIGNORE DLA PROJEKTU MONIT
+# ==========================================
+
+# --- Środowisko i konfiguracje lokalne ---
+.env
+.env*.local
+*.env
+auth.txt
+*.key
+*.pem
+*.cert
+Caddyfile
+__pycache__
+
+# --- Dane kontenerów Docker i Baz Danych ---
+postgres_data/
+n8n_data/
+caddy_data/
+caddy_config/
+logs/
+recordings/
+backend/recordings/
+*.log
+drizzle/
+
+# --- Python (Backend) ---
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.venv
+venv/
+ENV/
+env/
+python_venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Node.js & Next.js (Frontend) ---
+node_modules/
+nextjs-app/node_modules/
+.next/
+nextjs-app/.next/
+out/
+nextjs-app/out/
+.pnpm-store/
+.yarn/
+.npm
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+
+# --- Narzędzia deweloperskie i systemowe ---
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini

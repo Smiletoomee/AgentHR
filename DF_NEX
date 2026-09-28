@@ -1,0 +1,39 @@
+# 1. Obraz bazowy
+FROM node:26.9.0-trixie AS base
+
+# 2. Etap instalacji zależności ,deps
+FROM base AS deps
+WORKDIR /nextjs-app
+COPY package.json package-lock.json* ./
+RUN npm ci --force
+
+# 3. Etap budowania ,builder
+FROM base AS builder
+WORKDIR /nextjs-app
+COPY --from=deps /nextjs-app/node_modules ./node_modules
+COPY . .
+ENV NEXT_TELEMETRY_DISABLED=1
+ARG NEXT_PUBLIC_WS_URL
+ENV NEXT_PUBLIC_WS_URL=$NEXT_PUBLIC_WS_URL
+RUN npm run build
+
+# 4. Etap produkcyjny ,runner
+FROM base AS runner
+WORKDIR /nextjs-app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3030
+ENV HOSTNAME="0.0.0.0"
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Kopiujemy absolutnie wszystkie pliki źródłowe oraz produkcyjne zależności z etapu buildera
+COPY --from=builder --chown=nextjs:nodejs /nextjs-app ./
+
+USER nextjs
+EXPOSE 3030
+
+# Uruchamiamy aplikację standardową, oficjalną komendą produkcyjną Next.js
+CMD ["npx", "next", "start", "-p", "3030"]

@@ -1,0 +1,26 @@
+FROM python:3.14-slim-trixie
+
+WORKDIR /app
+
+# Optymalizacje środowiska deweloperskiego
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# W środowisku lokalnym instalujemy kompilatory bezpośrednio, 
+# gdyby programista dopisał nową paczkę wymagającą C podczas pracy
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instalacja paczek bezpośrednio w systemie kontenera, bez venv, bo kontener sam w sobie jest izolacją
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Kopiowanie kodu na start, w docker-compose i tak zostanie on nadpisany przez wolumen
+COPY . .
+
+EXPOSE 8000
+
+#  Uruchomienie z flagą --reload dla automatycznego odświeżania kodu źródłowego na żywo
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

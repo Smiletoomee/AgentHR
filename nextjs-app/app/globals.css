@@ -1,0 +1,504 @@
+@import "tailwindcss";
+
+@layer components {
+  /* Główne kontenery */
+  .dashboard-container {
+    @apply min-h-screen bg-slate-950 text-slate-100 p-6 md:p-10;
+  }
+  .dashboard-wrapper {
+    @apply max-w-7xl mx-auto space-y-8;
+  }
+
+  /* Nagłówek */
+  .dashboard-header {
+    @apply flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-6;
+  }
+  .header-icon-wrapper {
+    @apply p-2 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20;
+  }
+  .header-title {
+    @apply text-3xl font-bold tracking-tight text-white;
+  }
+  .header-subtitle {
+    @apply text-sm text-slate-400 mt-1;
+  }
+
+  /* Statystyki */
+  .stats-container {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4;
+  }
+  .stat-card {
+    @apply bg-slate-900/60 border border-slate-800 rounded-2xl p-5 flex items-center gap-4;
+  }
+  .stat-label {
+    @apply text-xs font-medium uppercase text-slate-400 tracking-wider;
+  }
+  .stat-value {
+    @apply text-2xl font-bold text-white mt-1;
+  }
+
+  /* Wykres i filtry */
+  .chart-container {
+    @apply bg-slate-900/60 border border-slate-800 rounded-2xl p-6;
+  }
+  .filters-container {
+    @apply flex flex-col sm:flex-row items-center gap-4;
+  }
+  .search-input {
+    @apply w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500;
+  }
+  .role-select {
+    @apply w-full sm:w-56 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-blue-500;
+  }
+
+  /* Układ kolumnowy dla listy */
+  .eval-list-container {
+    @apply flex flex-col gap-4 pb-24;
+  }
+  .eval-card {
+    @apply flex flex-col gap-3 bg-slate-900/60 border border-slate-800 p-5 rounded-2xl hover:bg-slate-800/30 transition-colors;
+  }
+  .eval-row {
+    @apply flex justify-between items-center border-b border-slate-800/50 pb-2 last:border-0 last:pb-0;
+  }
+  .eval-label {
+    @apply text-sm text-slate-400 font-medium;
+  }
+  .eval-value {
+    @apply text-sm text-white text-right;
+  }
+
+  /* Dropdown i przyciski */
+  .action-btn {
+    @apply p-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition border border-slate-700;
+  }
+  .dropdown-menu {
+    @apply absolute right-0 top-12 mt-1 w-44 rounded-xl bg-slate-900 border border-slate-700 shadow-2xl z-50 py-1.5 focus:outline-none backdrop-blur-md;
+  }
+  .dropdown-item {
+    @apply w-full text-left px-4 py-2.5 text-xs font-medium text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 transition;
+  }
+
+  /* Modal/Drawer */
+  .modal-overlay {
+    @apply fixed inset-0 z-100  bg-black/60 backdrop-blur-sm flex justify-end;
+  }
+  .modal-drawer {
+    @apply w-full max-w-xl bg-slate-900 border-l border-slate-800 h-full overflow-y-auto p-6 flex flex-col justify-between shadow-2xl;
+  }
+  .form-label {
+    @apply block text-xs font-medium text-slate-300 mb-1.5;
+  }
+  .form-input {
+    @apply w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500;
+  }
+
+  /* Animacja na scroll  */
+  .scroll-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+  .scroll-animate.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+
+  /* --- WIDOK ROZMOWY KANDYDATA - INTERVIEW PAGE --- */
+  .interview-page-container {
+    @apply min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-4 relative overflow-hidden;
+  }
+  .interview-background-grid {
+    @apply absolute inset-0 bg-[url('/grid.svg')] bg-center mask-[linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20 pointer-events-none;
+  }
+  .interview-card {
+    @apply relative z-10 max-w-lg w-full bg-slate-800 p-8 rounded-2xl shadow-2xl border border-slate-700 text-center;
+  }
+  .interview-loading-notice {
+    @apply text-slate-400 py-4 animate-pulse;
+  }
+  .interview-section-wrapper {
+    @apply space-y-6;
+  }
+  .interview-main-title {
+    @apply text-3xl font-bold mb-2;
+  }
+  .interview-main-subtitle {
+    @apply text-slate-400 text-sm;
+  }
+  .interview-status-heading-blue {
+    @apply text-2xl font-semibold text-blue-400;
+  }
+  .interview-status-heading-emerald {
+    @apply text-2xl font-semibold text-emerald-400;
+  }
+  .interview-status-description {
+    @apply text-sm text-slate-400;
+  }
+  .interview-live-bar {
+    @apply flex justify-between items-center bg-slate-900 px-4 py-2 rounded-xl;
+  }
+  .interview-live-badge {
+    @apply text-red-500 font-bold flex items-center gap-2;
+  }
+  .interview-live-indicator-dot {
+    @apply h-2 w-2 rounded-full bg-red-500 animate-ping;
+  }
+  .interview-timer-display {
+    @apply text-slate-300 font-mono text-sm;
+  }
+  .interview-listening-box {
+    @apply bg-slate-900/60 border border-slate-700/50 p-6 rounded-2xl flex flex-col items-center justify-center space-y-4;
+  }
+  .interview-equalizer-bars {
+    @apply flex items-center gap-2 h-8;
+  }
+  .interview-listening-label {
+    @apply text-emerald-400 font-semibold text-sm flex items-center justify-center gap-1.5;
+  }
+  .interview-listening-pulse-dot {
+    @apply h-2 w-2 rounded-full bg-emerald-400 animate-pulse;
+  }
+  .interview-listening-hint {
+    @apply text-xs text-slate-400 mt-1;
+  }
+  .interview-disconnect-button {
+    @apply w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-xl transition duration-200;
+  }
+  .interview-suspense-fallback {
+    @apply min-h-screen bg-slate-900 text-white flex items-center justify-center;
+  }
+
+  
+  /* --- WIDOK REJESTRACJI --- */
+  .auth-page-container {
+    @apply min-h-screen bg-slate-900 text-white flex flex-col justify-center items-center p-4;
+  }
+  .auth-card {
+    @apply max-w-md w-full bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-2xl;
+  }
+  .auth-header {
+    @apply text-center mb-6;
+  }
+  .auth-title {
+    @apply text-3xl font-bold text-white mb-2;
+  }
+  .auth-subtitle {
+    @apply text-slate-400 text-sm;
+  }
+  .auth-error-box {
+    @apply mb-4 p-3 bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-xl;
+  }
+  .auth-form {
+    @apply space-y-4;
+  }
+  .auth-field-group {
+    @apply space-y-1.5;
+  }
+  .auth-label {
+    @apply block text-sm font-medium text-slate-300;
+  }
+  .auth-input {
+    @apply w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm;
+  }
+  .auth-submit-button {
+    @apply w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium py-2.5 rounded-xl transition duration-200 text-sm;
+  }
+  .auth-oauth-grid {
+    @apply grid grid-cols-2 gap-2 mt-4;
+  }
+  .auth-oauth-button {
+    @apply flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-950 text-white text-xs py-2 px-4 rounded-xl border border-slate-700 transition;
+  }
+  .auth-footer-text {
+    @apply mt-6 text-center text-xs text-slate-400;
+  }
+  .auth-link {
+    @apply text-blue-400 hover:underline;
+  }
+
+
+    /* --- DODATKOWE KLASY DLA WIDOKU LOGOWANIA  --- */
+  .auth-login-submit-button {
+    @apply w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium py-3 rounded-xl transition duration-200 flex justify-center items-center gap-2 text-sm;
+  }
+  .auth-spinner {
+    @apply h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin;
+  }
+
+   /* --- SEMANTYCZNE ELEMENTY DLA  HR DASHBOARD --- */
+  .hr-tooltip-box {
+    @apply bg-slate-900 border border-slate-700 rounded-xl p-3 shadow-xl max-w-xs text-xs space-y-1.5 z-50 pointer-events-none;
+  }
+  .hr-tooltip-label {
+    @apply font-semibold text-white mb-1 break-all;
+  }
+  .hr-tooltip-text {
+    @apply text-slate-300;
+  }
+  .hr-tooltip-position {
+    @apply font-medium text-blue-400;
+  }
+  .hr-tooltip-score {
+    @apply font-medium text-emerald-400;
+  }
+
+  .hr-header-title-row {
+    @apply flex items-center gap-2;
+  }
+
+  .hr-stat-icon-users {
+    @apply p-3 bg-blue-500/10 text-blue-400 rounded-xl border border-blue-500/20;
+  }
+  .hr-stat-icon-award {
+    @apply p-3 bg-indigo-500/10 text-indigo-400 rounded-xl border border-indigo-500/20;
+  }
+  .hr-stat-icon-check {
+    @apply p-3 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20;
+  }
+  .hr-stat-icon-trending {
+    @apply p-3 bg-purple-500/10 text-purple-400 rounded-xl border border-purple-500/20;
+  }
+  .hr-stat-unit-text {
+    @apply text-sm font-normal text-slate-400;
+  }
+
+  .hr-chart-heading-text {
+    @apply text-lg font-semibold text-white mb-4;
+  }
+  .hr-chart-body-box {
+    @apply h-72 w-full;
+  }
+
+  .hr-search-input-wrapper {
+    @apply relative flex-1 w-full;
+  }
+  .hr-search-icon-element {
+    @apply absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500;
+  }
+
+  .hr-list-empty-message {
+    @apply text-center text-slate-500 py-10;
+  }
+  .hr-candidate-id-display {
+    @apply font-mono text-blue-400;
+  }
+  .hr-position-title {
+    @apply font-semibold block text-white;
+  }
+  .hr-position-subtitle {
+    @apply text-xs text-slate-400;
+  }
+  .hr-interviewer-display {
+    @apply text-slate-300;
+  }
+  .hr-score-display {
+    @apply font-semibold;
+  }
+  .hr-score-max-display {
+    @apply text-xs font-normal text-slate-500;
+  }
+  .hr-score-pipe {
+    @apply mx-2 text-slate-700;
+  }
+  .hr-cultural-score-display {
+    @apply text-indigo-400;
+  }
+  .hr-recommendation-group {
+    @apply flex items-center gap-3;
+  }
+  .hr-status-pipe {
+    @apply text-slate-700;
+  }
+  .hr-status-passed-badge {
+    @apply flex items-center gap-1 text-xs font-medium text-emerald-400;
+  }
+  .hr-status-rejected-badge {
+    @apply flex items-center gap-1 text-xs font-medium text-rose-400;
+  }
+  .hr-action-row-border {
+    @apply border-b-0! relative;
+  }
+  .hr-action-container {
+    @apply flex justify-end;
+  }
+
+  .hr-badge-strong-hire {
+    @apply text-emerald-400 font-semibold;
+  }
+  .hr-badge-hire {
+    @apply text-blue-400 font-semibold;
+  }
+  .hr-badge-no-hire {
+    @apply text-amber-400 font-semibold;
+  }
+  .hr-badge-strong-no-hire {
+    @apply text-rose-400 font-semibold;
+  }
+  .hr-badge-default {
+    @apply text-slate-400;
+  }
+
+  .hr-icon-blue {
+    @apply text-blue-400;
+  }
+  .hr-icon-emerald {
+    @apply text-emerald-400;
+  }
+
+  
+  /* --- SEMANTYCZNE ELEMENTY DLA LAYOUTU HR (HR LAYOUT) --- */
+  .hr-layout-container {
+    @apply min-h-screen bg-slate-900 text-white flex flex-col;
+  }
+  .hr-layout-header {
+    @apply border-b border-slate-800 bg-slate-950/80 px-6 py-4 flex justify-between items-center;
+  }
+  .hr-layout-brand-wrapper {
+    @apply flex items-center gap-3;
+  }
+  .hr-layout-brand-title {
+    @apply font-bold text-lg text-blue-400;
+  }
+  .hr-layout-user-section {
+    @apply flex items-center gap-4 text-sm;
+  }
+  .hr-layout-user-info {
+    @apply text-slate-300;
+  }
+  .hr-layout-main-content {
+    @apply flex-1 p-6;
+  }
+
+  /* --- SEMANTYCZNE ELEMENTY DLA KOMPONENTU CONNECT WITH RESUME --- */
+  .resume-connect-wrapper {
+    @apply w-full max-w-md mx-auto space-y-4 text-left;
+  }
+  .resume-upload-card {
+    @apply bg-slate-900/60 p-4 rounded-xl border border-slate-700;
+  }
+  .resume-upload-label {
+    @apply block text-sm font-medium text-slate-300 mb-2;
+  }
+  .resume-file-input {
+    @apply block w-full text-sm text-slate-400
+    file:mr-4 file:py-2 file:px-4
+    file:rounded-lg file:border-0
+    file:text-sm file:font-semibold
+    file:bg-blue-600 file:text-white
+    hover:file:bg-blue-700
+    cursor-pointer disabled:opacity-50;
+  }
+  .resume-file-success-info {
+    @apply mt-2 text-xs text-emerald-400;
+  }
+  .resume-error-notice {
+    @apply mt-2 text-xs text-red-400 font-medium;
+  }
+  .resume-position-input {
+    @apply w-full bg-slate-800 border border-slate-600 text-white text-sm rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500;
+  }
+  .resume-connect-submit-button {
+    @apply w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-700 text-white font-semibold py-3 px-6 rounded-xl transition duration-200 shadow-lg flex items-center justify-center gap-2;
+  }
+  .resume-button-spinner {
+    @apply h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin;
+  }
+
+    /* --- SEMANTYCZNE ELEMENTY DLA MODALA EDYCJI (EDIT EVALUATION MODAL) --- */
+  .eval-modal-backdrop {
+    @apply fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-end items-end md:items-stretch transition-opacity;
+  }
+  .eval-modal-panel {
+    @apply w-full md:max-w-2xl bg-slate-900 border-t md:border-t-0 md:border-l border-slate-800 h-[92vh] md:h-full flex flex-col justify-between shadow-2xl rounded-t-2xl md:rounded-none overflow-hidden;
+  }
+  .eval-modal-header {
+    @apply px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/50;
+  }
+  .eval-modal-title {
+    @apply text-lg md:text-xl font-bold text-white flex items-center gap-2;
+  }
+  .eval-modal-subtitle {
+    @apply text-xs text-slate-400 mt-0.5 font-mono;
+  }
+  .eval-modal-close-button {
+    @apply p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition;
+  }
+  .eval-modal-body {
+    @apply flex-1 overflow-y-auto p-6 space-y-6;
+  }
+  .eval-modal-error-banner {
+    @apply p-3.5 bg-rose-500/10 border border-rose-500/30 text-rose-400 rounded-xl text-xs flex items-center gap-2;
+  }
+  .eval-modal-form {
+    @apply space-y-6;
+  }
+  .eval-modal-section-card {
+    @apply bg-slate-950/40 p-4 rounded-xl border border-slate-800/80 space-y-4;
+  }
+  .eval-modal-section-heading-blue {
+    @apply text-xs font-semibold text-blue-400 uppercase tracking-wider flex items-center gap-1.5;
+  }
+  .eval-modal-section-heading-emerald {
+    @apply text-xs font-semibold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5;
+  }
+  .eval-modal-section-heading-purple {
+    @apply text-xs font-semibold text-purple-400 uppercase tracking-wider;
+  }
+  .eval-modal-grid-two-cols {
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-4;
+  }
+  .eval-modal-grid-three-cols {
+    @apply grid grid-cols-1 sm:grid-cols-3 gap-4;
+  }
+  .eval-modal-field-label {
+    @apply block text-xs font-medium text-slate-300 mb-1.5;
+  }
+  .eval-modal-field-input {
+    @apply w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500;
+  }
+  .eval-modal-textarea {
+    @apply w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500;
+  }
+   .eval-modal-toggle-wrapper {
+    @apply flex items-center h-9.5;
+  }
+  .eval-modal-toggle-label {
+    @apply relative inline-flex items-center cursor-pointer;
+  }
+  .eval-modal-toggle-track {
+    @apply w-11 h-6 bg-slate-800 rounded-full transition-all relative peer-focus:outline-none peer-checked:bg-emerald-600;
+  }
+  .eval-modal-toggle-track::after {
+    content: '';
+    @apply absolute top-0.5 left-0.5 bg-white border-slate-300 border rounded-full h-5 w-5 transition-all;
+  }
+  .peer:checked + .eval-modal-toggle-track::after {
+    @apply translate-x-full border-white;
+  }
+  .eval-modal-toggle-status-text {
+    @apply ml-3 text-xs font-medium text-slate-300;
+  }
+  .eval-modal-qualitative-section {
+    @apply space-y-4;
+  }
+  .eval-modal-footer {
+    @apply px-6 py-4 border-t border-slate-800 bg-slate-950/80 flex items-center justify-end gap-3;
+  }
+  .eval-modal-cancel-button {
+    @apply px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium rounded-xl transition disabled:opacity-50;
+  }
+  .eval-modal-submit-button {
+    @apply px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-xl transition flex items-center gap-2;
+  }
+  .eval-modal-button-spinner {
+    @apply h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin;
+  }
+
+    /* --- SEMANTYCZNE ELEMENTY DLA LOGOUT BUTTON --- */
+  .logout-button-element {
+    @apply text-xs bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition;
+  }
+
+}

@@ -1,0 +1,146 @@
+services:
+
+#   CADDY - Proxy
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+#    ports:
+#      - "8080:80"
+#      - "80:80"
+#      - "443:443"
+    volumes:
+      - ./logs/caddy:/var/log/caddy
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - monitoring
+
+# #POSTGRES - BAZA
+  postgres:
+    image: postgres:19beta3-trixie
+    ports:
+      - "5434:5432"
+    container_name: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - ./postgres_data:/var/lib/postgresql
+    networks:
+      - monitoring
+    env_file:
+      - .env
+
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   container_name: pgadmin
+  #   restart: always
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+  #     - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+  #     - PGADMIN_LISTEN_PORT=1180
+  #   volumes:
+  #     - pgadmin_data:/var/lib/pgadmin
+  #   networks:
+  #     - monitoring
+  #   depends_on:
+  #     - postgres
+  #   env_file:
+  #     - .env
+
+#NEXT.JS - FRONT
+  nextjs-app:
+    build:
+      context: ./nextjs-app
+      args:
+        - NEXT_PUBLIC_WS_URL=${NEXT_PUBLIC_WS_URL}
+    container_name: nextjs-app
+    restart: always
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+#      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL_FRONT}
+    networks:
+      - monitoring
+    env_file:
+      - .env
+    # DODAJ TE LINIE DLA DEBUGOWANIA DF_DEV_NEX:
+#    volumes:
+#      - ./nextjs-app:/nextjs-app # Mapuje Twój kod z podfolderu
+#      - /nextjs-app/node_modules # Chroni paczki kontenera przed nadpisaniem
+
+
+#Backend--FastAPI
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile   # Wskazuje na plik deweloperski
+    container_name: backend-dev
+    restart: always
+    # Dodano flagę --reload dla ułatwienia pracy deweloperskiej
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload --ws-ping-interval 30 --ws-ping-timeout 30
+    expose:
+      - "8000"
+    volumes:
+      - ./backend/recordings:/app/recordings             # Mapowanie kodu na żywo z komputera
+    environment:
+      - ENV=development
+      - PYTHONUNBUFFERED=1
+      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL_B}
+    networks:
+      - monitoring
+    env_file:
+      - .env
+
+# n8n - Automatyzacja
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: always
+    environment:
+      - N8N_HOST=${N8N_HOST}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+#      - N8N_SECURE_COOKIE=false
+      - NODE_ENV=production
+      - DB_TYPE=postgres
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB}
+      - DB_POSTGRESDB_HOST=${POSTGRES_HOST}
+      - DB_POSTGRESDB_PORT=$POSTGRES_PORT}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    networks:
+      - monitoring
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
+#Cloudflared - tunelowanie
+  tunnel:
+    container_name: cloudflared-tunnel
+    image: cloudflare/cloudflared:latest
+    restart: always
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    command: tunnel run
+    networks:
+      - monitoring
+    env_file:
+      - .env
+
+networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
+  postgres_data:
+  pgadmin_data:
+
