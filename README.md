@@ -8,15 +8,15 @@
 
 * **Analiza i Selekcja CV**: Automatyczne przetwarzanie dokumentów application/CV oraz ekstrakcja kluczowych umiejętności i doświadczenia.
 * **Dopasowanie Kandydatów**: Inteligentna ocena zgodności profilu kandydata z wymaganiami stanowiska.
-* **Asystent HR**: Agent odpowiadający na pytania pracowników dotyczące procedur, urlopów i wewnętrznych polityk firmy.
-* **Automatyzacja Komunikacji**: Wsparcie w generowaniu spersonalizowanych wiadomości do kandydatów oraz harmonogramowaniu spotkań.
+* W realizacji**Asystent HR**: Agent odpowiadający na pytania pracowników dotyczące procedur, urlopów i wewnętrznych polityk firmy.
+* W realizacji**Automatyzacja Komunikacji**: Wsparcie w generowaniu spersonalizowanych wiadomości do kandydatów oraz harmonogramowaniu spotkań.
 
 ---
 
 ## Stos Technologiczny
 
 * **Konteneryzacja**: Docker Compose
-* **Język / Środowisko**: Python 3.10+ / Node.js
+* **Język / Środowisko**: Python 3.11+ / Node.js
 * **Frameworki / Agentic AI**: LangChain / CrewAI / FastAPI / Streamlit
 * **Model AI**: Gemini / OpenAI GPT-4 / Claude / Llama
 
@@ -32,7 +32,7 @@ Przed uruchomieniem projektu upewnij się, że masz zainstalowane:
 
 ---
 
-## Szybki Start (Instrukcja Uruchomienia)
+## Szybki Start : Instrukcja Uruchomienia
 
 ### 1. Klonowanie Repozytorium
 
@@ -113,7 +113,7 @@ I gotowe! Aplikacja jest automatycznie budowana i uruchamiana.
 
 Aplikacja będzie dostępna w przeglądarce pod adresem wskazanym w konfiguracji.
 
-### 4. Zatrzmyanie Aplikacji
+### 4. Zatrzymanie Aplikacji
 
 Aby zatrzymać działające kontenery, wykonaj:
 
