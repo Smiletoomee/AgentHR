@@ -1,5 +1,5 @@
 import httpx
-from config import N8N_WEBHOOK_URL_B, AI_PROMPT
+from config import N8N_WEBHOOK_URL, AI_PROMPT
 
 async def send_to_n8n(
     transcript_text: str, 
@@ -14,8 +14,8 @@ async def send_to_n8n(
         candidate_id: ID kandydata z bazy danych
         candidate_display_name: Imię i nazwisko kandydata
     """
-    if not N8N_WEBHOOK_URL_B:
-        print("Zmienna N8N_WEBHOOK_URL_B jest pusta, pomijam wysyłkę do n8n.")
+    if not N8N_WEBHOOK_URL:
+        print("Zmienna N8N_WEBHOOK_URL jest pusta, pomijam wysyłkę do n8n.")
         return None
 
     try:
@@ -26,7 +26,7 @@ async def send_to_n8n(
                 "candidate_id": candidate_id,  # ID z bazy dla mapowania w tabeli wyników
                 "candidate_display_name": candidate_display_name  # Imię z CV
             }
-            response = await http_client.post(N8N_WEBHOOK_URL_B, json=payload)
+            response = await http_client.post(N8N_WEBHOOK_URL, json=payload)
             print(f"Wysyłka do n8n zakończona (Status: {response.status_code})")
             return response.json()
     except Exception as err:
